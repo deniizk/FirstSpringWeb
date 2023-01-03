@@ -2,26 +2,28 @@ package com.garanti.FirstSpringWeb.controller;
 
 import com.garanti.FirstSpringWeb.model.Ogrenci;
 import com.garanti.FirstSpringWeb.repo.OgrenciRepo;
+import com.garanti.FirstSpringWeb.repo.OgretmenRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "ogrenci")
 public class OgrenciController {
     private OgrenciRepo repo;
 
-    public OgrenciController() {
-        this.repo = new OgrenciRepo();
+    public OgrenciController(OgrenciRepo repo) {
+        this.repo = repo;
     }
 
     @GetMapping(path = "getAll", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ArrayList<Ogrenci>> getAll() {
+    public ResponseEntity<List<Ogrenci>> getAll() {
         // localhost:9090/FirstSpringWeb/ogrenci/getAll
-        ArrayList<Ogrenci> res = repo.getAll();
+        List<Ogrenci> res = repo.getAll();
         if (res == null || res.size() == 0) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
