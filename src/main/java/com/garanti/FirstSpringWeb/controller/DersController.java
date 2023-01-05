@@ -1,6 +1,8 @@
 package com.garanti.FirstSpringWeb.controller;
 
 import com.garanti.FirstSpringWeb.model.Ders;
+import com.garanti.FirstSpringWeb.model.Konu;
+import com.garanti.FirstSpringWeb.model.Ogretmen;
 import com.garanti.FirstSpringWeb.repo.DersRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "ders")
 public class DersController {
+
+    // olası hatalar
+    // CannotGetJdbcConnectionException
+    // BadSqlGrammarException
+    // InvalidDataAccessApiUsageException
+    // DataIntegrityViolationException
+
     private DersRepo repo;
 
     public DersController(DersRepo repo){
@@ -65,7 +74,9 @@ public class DersController {
     @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> save(@RequestBody Ders ders) {
         // localhost:9090/FirstSpringWeb/ders/save
-        if (repo.save(ders)) {
+        //if (repo.save(ders))
+        if(repo.saveTransactional(new Ogretmen("transactional test",true), new Konu("transactioanal konu")))
+        {
             return ResponseEntity.status(HttpStatus.CREATED).body("Başarı ile kaydedildi");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Başarı ile kaydedilemedi");

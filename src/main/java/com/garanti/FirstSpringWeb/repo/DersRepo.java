@@ -2,11 +2,14 @@ package com.garanti.FirstSpringWeb.repo;
 
 import com.garanti.FirstSpringWeb.Constants;
 import com.garanti.FirstSpringWeb.model.Ders;
+import com.garanti.FirstSpringWeb.model.Konu;
+import com.garanti.FirstSpringWeb.model.Ogretmen;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.*;
@@ -54,4 +57,24 @@ public class DersRepo {
         paramMap.put("KONU_ID", ders.getKONU_ID());
         return namedParameterJdbcTemplate.update(sql, paramMap) == 1;
     }
+    @Transactional
+    public boolean saveTransactional(Ogretmen ogretmen, Konu konu)
+    {
+        // try catch olmayacak !!!!
+        String sql = "Insert into BILGE.OGRETMEN (NAME, IS_GICIK) values (:NAME, :GICIK)";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("NAME", ogretmen.getNAME());
+        paramMap.put("GICIK", ogretmen.isIS_GICIK());
+        namedParameterJdbcTemplate.update(sql, paramMap);
+        sql = "Insert into BILGE.KONU (NAME) values (:NAME)";
+        paramMap = new HashMap<>();
+        paramMap.put("NAME", konu.getNAME());
+        namedParameterJdbcTemplate.update(sql, paramMap);
+        sql = "Insert into BILGE.DERS (OGR_ID, KONU_ID) values (:OGR_ID, :KONU_ID)";
+        paramMap = new HashMap<>();
+        paramMap.put("OGR_ID", 112233);
+        paramMap.put("KONU_ID", 112233);
+        return namedParameterJdbcTemplate.update(sql, paramMap) == 1;
+    }
+
 }

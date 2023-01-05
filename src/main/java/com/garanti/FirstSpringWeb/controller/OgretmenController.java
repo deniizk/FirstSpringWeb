@@ -2,14 +2,17 @@ package com.garanti.FirstSpringWeb.controller;
 
 import com.garanti.FirstSpringWeb.model.Ogretmen;
 import com.garanti.FirstSpringWeb.model.Person;
+import com.garanti.FirstSpringWeb.repo.DersRepo;
 import com.garanti.FirstSpringWeb.repo.OgretmenRepo;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,6 +21,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "ogretmen")
+//sadece DersRepo classının hatalarını yakalamak için
+@RestControllerAdvice(basePackageClasses = OgretmenRepo.class)
 public class OgretmenController {
 
     // localhost:9090/FirstSpringWeb/ogretmen
@@ -37,6 +42,21 @@ public class OgretmenController {
 
     // bean olarak ayağa kaldırılmazsa ise bir anlamı yok
     //@Autowired
+
+    @ExceptionHandler(value = BadSqlGrammarException.class)
+    public void badSqlGrammerExceptionHandler(BadSqlGrammarException e)
+    {
+        System.err.println(e.getMessage());
+    }
+
+    @ExceptionHandler(value = InvalidDataAccessApiUsageException.class)
+    @ResponseStatus(code = HttpStatus.IM_USED, reason =  "invalid jdbc usage") //burada bilgi veriyoruz
+    public String badSqlGrammerExceptionHandler(InvalidDataAccessApiUsageException e)
+    {
+        System.err.println(e.getMessage());
+        //isterseniz responseentiy
+        return "yazılımcı kodu yanlış yazdı";
+    }
     private OgretmenRepo repo;
 
     public OgretmenController(OgretmenRepo repo)

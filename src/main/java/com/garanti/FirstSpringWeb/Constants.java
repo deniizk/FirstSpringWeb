@@ -12,10 +12,11 @@ public final class Constants
 
     public static final String URL = "jdbc:oracle:thin:@localhost:1521";
 
-    public static Connection getConnection() throws Exception
+    //buna ihtiyacımız yok DataSource'dan connection bilgilerini alıyoruz.
+ /*   public static Connection getConnection() throws Exception
     {
         // gerekebilir
          Class.forName("oracle.jdbc.OracleDriver");
         return DriverManager.getConnection(URL, USER, PASSWORD);
-    }
+    }*/
 }
