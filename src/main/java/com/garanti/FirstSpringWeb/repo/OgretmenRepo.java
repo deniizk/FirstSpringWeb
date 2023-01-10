@@ -53,9 +53,9 @@ public class OgretmenRepo
     public Ogretmen getById(int id)
     {
         Ogretmen ogretmen = null;
-        String sql = "select * from BILGE.OGRETMEN where ID = :ABUZIDDIN";
+        String sql = "select * from BILGE.OGRETMEN where ID = :ID";
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("ABUZIDDIN", id);
+        paramMap.put("ID", id);
         ogretmen = namedParameterJdbcTemplate.queryForObject(sql, paramMap, BeanPropertyRowMapper.newInstance(Ogretmen.class));
         // ---------------------------------
         /*ResultSetExtractor<Ogretmen> rse = new ResultSetExtractor<Ogretmen>()
